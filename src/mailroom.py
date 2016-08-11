@@ -3,16 +3,13 @@
 
 import sys
 
-donor_1 = {'name': 'Steven', 'donations': [3, 6]}
-donor_2 = {'name': 'David', 'donations': [1, 10, 9]}
-donor_3 = {'name': 'Zach', 'donations': [1, 2]}
-donor_list = [donor_1, donor_2, donor_3]
 
 donor_dict = {
     'Steven': [3, 6],
     'David': [1, 5, 7],
     'Zach': [5, 3, 6]
 }
+
 
 def main():
     while True:
@@ -22,8 +19,13 @@ def main():
             continue
         handle_input(user_input)()
 
+
 def welcome_message():
-    print("Welcome to the donor database. Please enter 1, 2 or 3")
+    print("Welcome to the donor database.")
+    print("Enter 1 to send thank you note")
+    print("Enter 2 to view report")
+    print("Enter 3 to exit\n")
+
 
 def is_valid_input(user_input, my_list):
     """Promt user input check if in a list."""
@@ -33,16 +35,18 @@ def is_valid_input(user_input, my_list):
 
 
 def handle_input(user_input):
-    actions = {'1': send_thanks, '2':list_donors, '3': exit}
+    actions = {'1': send_thanks, '2': report_donors, '3': exit}
     return actions[user_input]
 
 
 def generate_thankyou(donor, amount):
-    print('Thank you, {0} for your donation of {1} dollars.'.format(donor, amount)) 
+    print('Thank you, {0} for your donation of {1} dollars.\n'.format(
+        donor, amount)
+    )
 
 
 def send_thanks():
-    donor = input ("Enter Donor name or list > ")
+    donor = input("Enter Donor name or list > ")
     if donor == 'list':
         print(donor_dict)
         send_thanks()
@@ -61,11 +65,19 @@ def send_thanks():
         return
 
 
-
-
-
-def list_donors():
-    pass
+def report_donors():
+    donor_list = []
+    for donor in donor_dict:
+        donor_list.append((donor, sum(donor_dict[donor])))
+    donor_list.sort(key=lambda x: -x[1])
+    print('-' * 24 + '|' + '-' * 10)
+    print('{0}{1}|{2}'.format('Name', ' ' * 20, 'Total'))
+    print('-' * 24 + '|' + '-' * 10)
+    for donor in donor_list:
+        print('{0}{1}|{2}'.format(
+            donor[0], ' ' * (24 - len(donor[0])), donor[1])
+        )
+    print('-' * 24 + '|' + '-' * 10 + '\n')
 
 
 def exit():
