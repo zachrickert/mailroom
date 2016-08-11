@@ -8,6 +8,12 @@ donor_2 = {'name': 'David', 'donations': [1, 10, 9]}
 donor_3 = {'name': 'Zach', 'donations': [1, 2]}
 donor_list = [donor_1, donor_2, donor_3]
 
+donor_dict = {
+    'Steven': [3, 6],
+    'David': [1, 5, 7],
+    'Zach': [5, 3, 6]
+}
+
 def main():
     while True:
         welcome_message()
@@ -31,14 +37,29 @@ def handle_input(user_input):
     return actions[user_input]
 
 
+def generate_thankyou(donor, amount):
+    print('Thank you, {0} for your donation of {1} dollars.'.format(donor, amount)) 
+
+
 def send_thanks():
-    my_list = []
-    for donor in donor_list:
-        my_list.append(donor['name'])
     donor = input ("Enter Donor name or list > ")
     if donor == 'list':
-        print(my_list)
+        print(donor_dict)
         send_thanks()
+    elif donor != 'return':
+        amount = ''
+        while type(amount) is str:
+            amount = input("Input donation amount: ")
+            try:
+                amount = int(amount)
+            except ValueError:
+                continue
+            else:
+                donor_dict.setdefault(donor, []).append(amount)
+        generate_thankyou(donor, amount)
+    elif donor == 'return':
+        return
+
 
 
 
