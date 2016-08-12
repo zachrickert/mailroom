@@ -12,8 +12,9 @@ donor_dict = {
 
 
 def main():
+    """Main func that get executed when run in the cli"""
     while True:
-        welcome_message()
+        print(welcome_message())
         user_input = input("Selection: ")
         if not is_valid_input(user_input, ['1', '2', '3']):
             continue
@@ -21,10 +22,11 @@ def main():
 
 
 def welcome_message():
-    print("Welcome to the donor database.")
-    print("Enter 1 to send thank you note")
-    print("Enter 2 to view report")
-    print("Enter 3 to exit\n")
+    """Returns welcome message and instruction when the app starts"""
+    return ('Welcome to the donor database.\n'
+            'Enter 1 to send thank you note\n'
+            'Enter 2 to view report\n'
+            'Enter 3 to exit\n')
 
 
 def is_valid_input(user_input, my_list):
@@ -40,9 +42,20 @@ def handle_input(user_input):
 
 
 def generate_thankyou(donor, amount):
-    print('Thank you, {0} for your donation of {1} dollars.\n'.format(
+    return 'Thank you, {0} for your donation of {1} dollars.\n'.format(
         donor, amount)
-    )
+
+
+def build_report_table(donor_list):
+    """Generate a report table from donor list"""
+    top_border = '\n{0}|{1}\n'.format('-' * 24, '-' * 10)
+    row_separator = '{0}|{1}\n'.format('-' * 24, '-' * 10)
+    header = '{0}{1}|{2}\n'.format('Name', ' ' * 20, 'Total')
+    body = ''
+    for donor in donor_list:
+        body += '{0}{1}|{2}\n'.format(
+            donor[0], ' ' * (24 - len(donor[0])), donor[1])
+    return top_border + header + row_separator + body + row_separator
 
 
 def send_thanks():
@@ -60,29 +73,22 @@ def send_thanks():
                 continue
             else:
                 donor_dict.setdefault(donor, []).append(amount)
-        generate_thankyou(donor, amount)
+        print(generate_thankyou(donor, amount))
     elif donor == 'return':
         return
 
 
 def report_donors():
+    """Print the list of all donors in a organized table"""
     donor_list = []
     for donor in donor_dict:
         donor_list.append((donor, sum(donor_dict[donor])))
     donor_list.sort(key=lambda x: -x[1])
-    print('-' * 24 + '|' + '-' * 10)
-    print('{0}{1}|{2}'.format('Name', ' ' * 20, 'Total'))
-    print('-' * 24 + '|' + '-' * 10)
-    for donor in donor_list:
-        print('{0}{1}|{2}'.format(
-            donor[0], ' ' * (24 - len(donor[0])), donor[1])
-        )
-    print('-' * 24 + '|' + '-' * 10 + '\n')
+    print(build_report_table(donor_list))
 
 
 def exit():
     sys.exit(0)
-
 
 if __name__ == '__main__':
     main()
