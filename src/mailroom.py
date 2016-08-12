@@ -58,6 +58,13 @@ def build_report_table(donor_list):
     return top_border + header + row_separator + body + row_separator
 
 
+def donor_list_by_total(my_dict):
+    donor_list = []
+    for donor in my_dict:
+        donor_list.append((donor, sum(my_dict[donor])))
+    donor_list.sort(key=lambda x: -x[1])
+    return donor_list
+
 def send_thanks():
     donor = input("Enter Donor name or list > ")
     if donor == 'list':
@@ -80,10 +87,7 @@ def send_thanks():
 
 def report_donors():
     """Print the list of all donors in a organized table"""
-    donor_list = []
-    for donor in donor_dict:
-        donor_list.append((donor, sum(donor_dict[donor])))
-    donor_list.sort(key=lambda x: -x[1])
+    donor_list = donor_list_by_total(donor_dict)
     print(build_report_table(donor_list))
 
 

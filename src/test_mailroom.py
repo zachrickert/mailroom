@@ -10,6 +10,13 @@ DONOR_THANKYOU = [
     ('Zach', 9.99, 'Thank you, Zach for your donation of 9.99 dollars.\n')
 ]
 
+DONOR_DICT = [
+    ({'a': [1, 2, 3], 'b': [4, 5, 6], 'c':[7, 8, 9]}, [('c', 24), ('b', 15), ('a', 6)]),
+    ({'a': [1], 'b': [2], 'c':[3]}, [('c', 3), ('b', 2), ('a', 1)]),
+    ({'a': [1, 3], 'b': [2, 2], 'c':[4, 0]}, [('a', 4), ('b', 4), ('c', 4)]),
+    ({'a': [1, 3], 'b': [2, 5], 'c':[]}, [('b', 7), ('a', 4), ('c', 0)])
+]
+
 
 @pytest.mark.parametrize('donor, amount, message', DONOR_THANKYOU)
 def test_generate_thankyou(donor, amount, message):
@@ -39,3 +46,9 @@ def test_welcome_message():
                                    'Enter 3 to exit\n')
 
 # TODO for Steven: write test for build_report_table func
+
+
+@pytest.mark.parametrize('donor_dictionary, result', DONOR_DICT)
+def test_donor_list_by_total(donor_dictionary, result):
+    assert m.donor_list_by_total(donor_dictionary) == result
+
