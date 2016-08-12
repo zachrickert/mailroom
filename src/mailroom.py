@@ -85,6 +85,19 @@ def send_thanks():
         return
 
 
+def validate_donation(my_str):
+    try:
+        amount = float(my_str)
+    except ValueError:
+        return 0
+    else:
+        if amount > 0:
+            return amount
+        else:
+            return 0
+
+
+
 def report_donors():
     """Print the list of all donors in a organized table"""
     donor_list = donor_list_by_total(donor_dict)

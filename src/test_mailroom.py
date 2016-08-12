@@ -13,10 +13,10 @@ DONOR_THANKYOU = [
 DONOR_DICT = [
     ({'a': [1, 2, 3], 'b': [4, 5, 6], 'c':[7, 8, 9]}, [('c', 24), ('b', 15), ('a', 6)]),
     ({'a': [1], 'b': [2], 'c':[3]}, [('c', 3), ('b', 2), ('a', 1)]),
-    ({'a': [1, 3], 'b': [2, 2], 'c':[4, 0]}, [('a', 4), ('b', 4), ('c', 4)]),
     ({'a': [1, 3], 'b': [2, 5], 'c':[]}, [('b', 7), ('a', 4), ('c', 0)])
 ]
 
+DONATION_AMT = [('1', 1.0), ('0', 0.0), ('a', 0), ('-6', 0), (12, 12.0)]
 
 @pytest.mark.parametrize('donor, amount, message', DONOR_THANKYOU)
 def test_generate_thankyou(donor, amount, message):
@@ -51,4 +51,8 @@ def test_welcome_message():
 @pytest.mark.parametrize('donor_dictionary, result', DONOR_DICT)
 def test_donor_list_by_total(donor_dictionary, result):
     assert m.donor_list_by_total(donor_dictionary) == result
+
+@pytest.mark.parametrize('donor_amt, result', DONATION_AMT)
+def test_validate_donation(donor_amt, result):
+    assert m.validate_donation(donor_amt) == result
 
