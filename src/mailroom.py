@@ -42,8 +42,8 @@ def handle_input(user_input):
 
 
 def generate_thankyou(donor, amount):
-    return 'Thank you, {0} for your donation of {1} dollars.\n'.format(
-        donor, amount)
+    return 'Thank you, {0} for your donation of ${1:.2f}.\n'.format(
+        donor, round(amount, 2))
 
 
 def build_report_table(donor_list):
@@ -66,23 +66,20 @@ def donor_list_by_total(my_dict):
     return donor_list
 
 def send_thanks():
-    donor = input("Enter Donor name or list > ")
-    if donor == 'list':
-        print(donor_dict)
-        send_thanks()
-    elif donor != 'return':
-        amount = ''
-        while type(amount) is str:
-            amount = input("Input donation amount: ")
-            try:
-                amount = int(amount)
-            except ValueError:
-                continue
+    while True:
+        donor = input("Enter Donor name or list > ")
+        if donor == 'list':
+            print(donor_dict)
+        elif donor == 'return':
+            return
+        else:
+            amount = 0
+            while not amount:
+                amount = validate_donation(
+                    input("Input donation amount: "))
             else:
                 donor_dict.setdefault(donor, []).append(amount)
-        print(generate_thankyou(donor, amount))
-    elif donor == 'return':
-        return
+            print(generate_thankyou(donor, amount))
 
 
 def validate_donation(my_str):
