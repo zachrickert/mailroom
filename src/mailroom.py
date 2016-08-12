@@ -11,7 +11,7 @@ donor_dict = {
 }
 
 
-def main():
+def main_menu():
     """Main func that get executed when run in the cli"""
     while True:
         print(welcome_message())
@@ -19,6 +19,33 @@ def main():
         if not is_valid_input(user_input, ['1', '2', '3']):
             continue
         handle_input(user_input)()
+
+
+def send_thanks():
+    while True:
+        donor = input("Enter Donor name, 'list' or 'return' > ")
+        if donor == 'list':
+            print(build_report_table(donor_list_by_total(donor_dict)))
+        elif donor == 'return':
+            return
+        else:
+            amount = 0
+            while not amount:
+                amount = validate_donation(
+                    input("Input donation amount: "))
+            else:
+                donor_dict.setdefault(donor, []).append(amount)
+            print(generate_thankyou(donor, amount))
+
+
+def report_donors():
+    """Print the list of all donors in a organized table"""
+    donor_list = donor_list_by_total(donor_dict)
+    print(build_report_table(donor_list))
+
+
+def exit():
+    sys.exit(0)
 
 
 def welcome_message():
@@ -65,22 +92,6 @@ def donor_list_by_total(my_dict):
     donor_list.sort(key=lambda x: -x[1])
     return donor_list
 
-def send_thanks():
-    while True:
-        donor = input("Enter Donor name or list > ")
-        if donor == 'list':
-            print(donor_dict)
-        elif donor == 'return':
-            return
-        else:
-            amount = 0
-            while not amount:
-                amount = validate_donation(
-                    input("Input donation amount: "))
-            else:
-                donor_dict.setdefault(donor, []).append(amount)
-            print(generate_thankyou(donor, amount))
-
 
 def validate_donation(my_str):
     try:
@@ -94,15 +105,5 @@ def validate_donation(my_str):
             return 0
 
 
-
-def report_donors():
-    """Print the list of all donors in a organized table"""
-    donor_list = donor_list_by_total(donor_dict)
-    print(build_report_table(donor_list))
-
-
-def exit():
-    sys.exit(0)
-
 if __name__ == '__main__':
-    main()
+    main_menu()

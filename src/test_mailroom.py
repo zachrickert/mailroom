@@ -5,9 +5,9 @@ import pytest
 import mailroom as m
 
 DONOR_THANKYOU = [
-    ('David', '10', 'Thank you, David for your donation of 10 dollars.\n'),
-    ('Steven', 10, 'Thank you, Steven for your donation of 10 dollars.\n'),
-    ('Zach', 9.99, 'Thank you, Zach for your donation of 9.99 dollars.\n')
+    ('David', 10, 'Thank you, David for your donation of $10.00.\n'),
+    ('Steven', 10, 'Thank you, Steven for your donation of $10.00.\n'),
+    ('Zach', 9.99, 'Thank you, Zach for your donation of $9.99.\n')
 ]
 
 DONOR_DICT = [
