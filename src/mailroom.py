@@ -11,7 +11,7 @@ donor_dict = {
 }
 
 
-def main_menu():
+def main_menu():    # pragma: no cover
     """Main func that get executed when run in the CLI."""
     try:
         while True:
@@ -24,7 +24,7 @@ def main_menu():
         print('\nScript terminated\n')
 
 
-def send_thanks():
+def send_thanks():  # pragma: no cover
     """Send thank-you note submenu."""
     while True:
         donor = input("Enter Donor name, 'list' or 'return' > ")
@@ -44,13 +44,13 @@ def send_thanks():
             print('-Sincerely, Gov. Whoever')
 
 
-def report_donors():
+def report_donors():    # pragma: no cover
     """Report submenu."""
     donor_list = donor_list_by_total(donor_dict)
     print(build_report_table(donor_list))
 
 
-def exit():
+def exit():     # pragma: no cover
     """Terminate program without error."""
     sys.exit(0)
 
@@ -82,7 +82,7 @@ def generate_thankyou(donor, amount):
         donor, round(amount, 2))
 
 
-def build_report_table(donor_list):
+def build_report_table(donor_list):     # pragma: no cover
     """Generate a report table from donor list."""
     top_border = '\n{0}|{1}\n'.format('-' * 24, '-' * 10)
     row_separator = '{0}|{1}\n'.format('-' * 24, '-' * 10)
@@ -116,5 +116,5 @@ def validate_donation(my_str):
             return 0
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     main_menu()
