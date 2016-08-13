@@ -12,7 +12,7 @@ donor_dict = {
 
 
 def main_menu():
-    """Main func that get executed when run in the cli"""
+    """Main func that get executed when run in the CLI."""
     try:
         while True:
             print(welcome_message())
@@ -25,7 +25,7 @@ def main_menu():
 
 
 def send_thanks():
-    """Send thank-you note submenu"""
+    """Send thank-you note submenu."""
     while True:
         donor = input("Enter Donor name, 'list' or 'return' > ")
         if donor == 'list':
@@ -39,22 +39,24 @@ def send_thanks():
                     input("Input donation amount: "))
             else:
                 donor_dict.setdefault(donor, []).append(amount)
+            print('')
             print(generate_thankyou(donor, amount))
+            print('-Sincerely, Gov. Whoever')
 
 
 def report_donors():
-    """Report submenu"""
+    """Report submenu."""
     donor_list = donor_list_by_total(donor_dict)
     print(build_report_table(donor_list))
 
 
 def exit():
-    """Terminate program without error"""
+    """Terminate program without error."""
     sys.exit(0)
 
 
 def welcome_message():
-    """Returns welcome message and instruction when the app starts"""
+    """Return welcome message and instruction when the app starts."""
     return ('Welcome to the donor database.\n'
             'Enter 1 to send thank you note\n'
             'Enter 2 to view report\n'
@@ -69,18 +71,19 @@ def is_valid_input(user_input, my_list):
 
 
 def handle_input(user_input):
+    """Return function to execute to main()."""
     actions = {'1': send_thanks, '2': report_donors, '3': exit}
     return actions[user_input]
 
 
 def generate_thankyou(donor, amount):
-    """Create thank-you not from donor name and amount"""
+    """Create thank-you not from donor name and amount."""
     return 'Thank you, {0} for your donation of ${1:.2f}.\n'.format(
         donor, round(amount, 2))
 
 
 def build_report_table(donor_list):
-    """Generates a report table from donor list"""
+    """Generate a report table from donor list."""
     top_border = '\n{0}|{1}\n'.format('-' * 24, '-' * 10)
     row_separator = '{0}|{1}\n'.format('-' * 24, '-' * 10)
     header = '{0}{1}|{2}\n'.format('Name', ' ' * 20, 'Total')
@@ -92,8 +95,7 @@ def build_report_table(donor_list):
 
 
 def donor_list_by_total(my_dict):
-    """Returns a sorted list of tuples, each tuple contains donor name and
-    total donated amount"""
+    """Return a sorted list of tuples, each tuple contains donor name and total donated amount."""
     donor_list = []
     for donor in my_dict:
         donor_list.append((donor, sum(my_dict[donor])))
@@ -102,7 +104,7 @@ def donor_list_by_total(my_dict):
 
 
 def validate_donation(my_str):
-    """Check for valid donation amount, should be > 0"""
+    """Check for valid donation amount, should be > 0."""
     try:
         amount = float(my_str)
     except ValueError:
