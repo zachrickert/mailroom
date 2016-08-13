@@ -25,7 +25,19 @@ DONOR_DICT = [
     )
 ]
 
-DONATION_AMT = [('1', 1.0), ('0', 0.0), ('a', 0), ('-6', 0), (12, 12.0)]
+DONATION_AMT = [
+    ('1', 1.0),
+    ('0', 0.0),
+    ('a', 0),
+    ('-6', 0),
+    (12, 12.0)
+]
+
+INPUT_FUNCS = [
+    ('1', m.send_thanks),
+    ('2', m.report_donors),
+    ('3', m.exit)
+]
 
 
 @pytest.mark.parametrize('donor, amount, message', DONOR_THANKYOU)
@@ -33,12 +45,6 @@ def test_generate_thankyou(donor, amount, message):
     """Test generate_thankyou func to output correct thankyou message based on
     donor's name and donation amout"""
     assert m.generate_thankyou(donor, amount) == message
-
-INPUT_FUNCS = [
-    ('1', m.send_thanks),
-    ('2', m.report_donors),
-    ('3', m.exit)
-]
 
 
 @pytest.mark.parametrize('user_input, func', INPUT_FUNCS)
