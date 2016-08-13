@@ -11,6 +11,6 @@ setup(
     py_modules=['mailroom'],
     package_dir={'': 'src'},
     install_requires=[],
-    extras_require={'test': ['pytest']},
+    extras_require={'test': ['pytest', 'tox']},
     entry_points={'console_scripts': ["mailroom = mailroom:main_menu"]}
 )
