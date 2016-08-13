@@ -13,12 +13,15 @@ donor_dict = {
 
 def main_menu():
     """Main func that get executed when run in the cli"""
-    while True:
-        print(welcome_message())
-        user_input = input("Selection: ")
-        if not is_valid_input(user_input, ['1', '2', '3']):
-            continue
-        handle_input(user_input)()
+    try:
+        while True:
+            print(welcome_message())
+            user_input = input("Selection: ")
+            if not is_valid_input(user_input, ['1', '2', '3']):
+                continue
+            handle_input(user_input)()
+    except KeyboardInterrupt:
+        print('\nScript terminated\n')
 
 
 def send_thanks():
