@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """The mailroom script will do stuff."""
 
+import os
 import sys
 
 
@@ -23,9 +24,11 @@ def main_menu():
 
 def send_thanks():
     while True:
-        donor = input("Enter Donor name, 'list' or 'return' > ")
+        clear_screen()
+        donor = input("Enter Donor name, 'list' or 'return': ")
         if donor == 'list':
             print(build_report_table(donor_list_by_total(donor_dict)))
+            press_to_continue()
         elif donor == 'return':
             return
         else:
@@ -36,25 +39,36 @@ def send_thanks():
             else:
                 donor_dict.setdefault(donor, []).append(amount)
             print(generate_thankyou(donor, amount))
+            press_to_continue()
 
 
 def report_donors():
     """Print the list of all donors in a organized table"""
     donor_list = donor_list_by_total(donor_dict)
     print(build_report_table(donor_list))
+    press_to_continue()
 
 
 def exit():
     sys.exit(0)
 
 
+def clear_screen():
+    """Clears the screen."""
+    os.system('cls' if os.name=='nt' else 'clear')
+
+
 def welcome_message():
     """Returns welcome message and instruction when the app starts"""
+    clear_screen()
     return ('Welcome to the donor database.\n'
             'Enter 1 to send thank you note\n'
             'Enter 2 to view report\n'
             'Enter 3 to exit\n')
 
+
+def press_to_continue():
+    input('Press any button to continue.')
 
 def is_valid_input(user_input, my_list):
     """Promt user input check if in a list."""
