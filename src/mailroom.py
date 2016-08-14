@@ -36,6 +36,8 @@ def send_thanks():  # pragma: no cover
             print(build_report_table(donor_list_by_total(donor_dict)))
         elif donor == 'return':
             return
+        elif donor == '':
+            pass
         else:
             amount = 0
             while not amount:
@@ -62,7 +64,7 @@ def generate_thankyou(donor, amount, template='letter_template.txt'):
     if file_found:
         letter = ""
         for line in f:
-            if(not(line[0] == '#')):
+            if line[0] != '#':
                 letter = letter + line
         f.close()
     else:
