@@ -4,6 +4,12 @@
 import os
 import sys
 
+DEFAULT_DONORS = {
+    'Steven': [3, 6],
+    'David': [1, 5, 7],
+    'Zach': [5, 3, 6]
+}
+
 
 def main_menu():    # pragma: no cover
     """Main func that get executed when run in the CLI."""
@@ -80,35 +86,46 @@ def press_to_continue():        # pragma: no cover
 
 def read_donors():
     """Read donor data from a txt file."""
+    global donor_dict
     donor_dict = {}
+    file_found = True
     try:
-        f = open('donor.txt', 'r')
-        for line in f:
-            temp_list = line.split('>>')
+        donor_file = open('donor.txt', 'r')
+    except IOError:
+        try:
+            donor_file = open('src/donor.txt', 'r')
+        except IOError:
+            print('Could not find donor.txt file.')
+            file_found = False
+
+    if file_found:
+        for line in donor_file:
+            temp_list = line.split('||')
             donor = temp_list.pop().rstrip()
             donor_dict[donor] = [float(i) for i in temp_list]
+    else:
+        print('Test')
+        donor_dict = DEFAULT_DONORS
 
-    except IOError:
-        print('Could not find donor.txt file.')
-
+    donor_file.close()
     return donor_dict
 
 
 def save_donors(donor_dict):    # pragma: no cover
     """Save donors information to a test file."""
     try:
-        f = open('donor.txt', 'w')
+        donor_file = open('donor.txt', 'w')
     except IOError:
         print('Could not save to the donor.txt file.')
 
     for donor in donor_dict:
         line = ''
         for amount in donor_dict[donor]:
-            line += '{}>>'.format(amount)
+            line += '{}||'.format(amount)
 
         line = '{}{}{}'.format(line, donor, '\n')
-        f.write(line)
-    f.close()
+        donor_file.write(line)
+    donor_file.close()
 
 
 def is_valid_input(user_input, my_list):
@@ -162,7 +179,6 @@ def validate_donation(my_str):
             return amount
         else:
             return 0
-
 
 if __name__ == '__main__':  # pragma: no cover
     donor_dict = read_donors()
