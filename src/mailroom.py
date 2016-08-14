@@ -10,7 +10,7 @@ donor_dict = {
     'Zach': [5, 3, 6]
 }
 
-DEFAULT_LETTER = 'Thank you, {0} for your donation of {1}.\n'
+DEFAULT_LETTER = 'Thank you, {name} for your donation of {amount}.\n'
 
 
 def main_menu():    # pragma: no cover
@@ -42,17 +42,18 @@ def send_thanks():  # pragma: no cover
             else:
                 donor_dict.setdefault(donor, []).append(amount)
             print('')
-            print_letter(donor, format_amount(amount))
+            print(generate_thankyou(donor, format_amount(amount)))
 
 
-def print_letter(donor, amount):
+def generate_thankyou(donor, amount, template='letter_template.txt'):
     """Print the template_letter.txt file or a default thank you."""
     file_found = True
     try:
-        f = open("letter_template.txt", 'r')
+        f = open(template, 'r')
     except IOError:
         try:
-            f = open("src/letter_template.txt", 'r')
+            template = 'src/' + template
+            f = open(template, 'r')
         except IOError:
             file_found = False
 
@@ -65,7 +66,7 @@ def print_letter(donor, amount):
     else:
         letter = DEFAULT_LETTER
 
-    print(letter.format(donor, amount))
+    return letter.format(name=donor, amount=amount)
 
 
 def report_donors():    # pragma: no cover
