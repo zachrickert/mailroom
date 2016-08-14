@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """The mailroom script will do stuff."""
 
+import os
 import sys
 
 
@@ -19,6 +20,7 @@ def main_menu():    # pragma: no cover
             user_input = input("Selection: ")
             if not is_valid_input(user_input, ['1', '2', '3']):
                 continue
+            clear_screen()
             handle_input(user_input)()
     except KeyboardInterrupt:
         print('\nScript terminated\n')
@@ -27,7 +29,7 @@ def main_menu():    # pragma: no cover
 def send_thanks():  # pragma: no cover
     """Send thank-you note submenu."""
     while True:
-        donor = input("Enter Donor name, 'list' or 'return' > ")
+        donor = input("Enter Donor name, 'list' or 'return': ")
         if donor == 'list':
             print(build_report_table(donor_list_by_total(donor_dict)))
         elif donor == 'return':
@@ -42,12 +44,20 @@ def send_thanks():  # pragma: no cover
             print('')
             print(generate_thankyou(donor, amount))
             print('-Sincerely, Gov. Whoever')
+            press_to_continue()
 
 
 def report_donors():    # pragma: no cover
     """Report submenu."""
+    clear_screen()
     donor_list = donor_list_by_total(donor_dict)
     print(build_report_table(donor_list))
+
+
+def report_donors_wait():    # pragma: no cover
+    """Report submenu."""
+    report_donors()
+    press_to_continue()
 
 
 def exit():     # pragma: no cover
@@ -55,12 +65,23 @@ def exit():     # pragma: no cover
     sys.exit(0)
 
 
+def clear_screen():     # pragma: no cover
+    """Clear screen."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
 def welcome_message():
     """Return welcome message and instruction when the app starts."""
+    clear_screen()
     return ('Welcome to the donor database.\n'
             'Enter 1 to send thank you note\n'
             'Enter 2 to view report\n'
             'Enter 3 to exit\n')
+
+
+def press_to_continue():        # pragma: no cover
+    """Wait for user input before proceeding."""
+    input('Press any button to continue.')
 
 
 def is_valid_input(user_input, my_list):
@@ -72,7 +93,7 @@ def is_valid_input(user_input, my_list):
 
 def handle_input(user_input):
     """Return function to execute to main()."""
-    actions = {'1': send_thanks, '2': report_donors, '3': exit}
+    actions = {'1': send_thanks, '2': report_donors_wait, '3': exit}
     return actions[user_input]
 
 
