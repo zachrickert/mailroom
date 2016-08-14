@@ -37,7 +37,7 @@ def send_thanks():  # pragma: no cover
         elif donor == 'return':
             return
         elif donor == '':
-            pass
+            continue
         else:
             amount = 0
             while not amount:
