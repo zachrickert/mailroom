@@ -5,9 +5,9 @@ import pytest
 import mailroom as m
 
 DONOR_THANKYOU = [
-    ('David', 10, 'Thank you, David for your donation of $10.00.\n'),
-    ('Steven', 10, 'Thank you, Steven for your donation of $10.00.\n'),
-    ('Zach', 9.99, 'Thank you, Zach for your donation of $9.99.\n')
+    ('David', 10, 'Thank you, David for your donation of 10.\n'),
+    ('Steven', 10, 'Thank you, Steven for your donation of 10.\n'),
+    ('Zach', 9.99, 'Thank you, Zach for your donation of 9.99.\n')
 ]
 
 DONOR_DICT = [
@@ -33,9 +33,16 @@ DONATION_AMT = [
     (12, 12.0)
 ]
 
+FORMAT_AMT = [
+    (1, '$1.00'),
+    (0, '$0.00'),
+    (1.5, '$1.50'),
+    (5 / 3, '$1.67'),
+]
+
 INPUT_FUNCS = [
     ('1', m.send_thanks),
-    ('2', m.report_donors),
+    ('2', m.report_donors_wait),
     ('3', m.exit)
 ]
 
@@ -44,7 +51,7 @@ INPUT_FUNCS = [
 def test_generate_thankyou(donor, amount, message):
     """Test generate_thankyou func to output correct thankyou message based on
     donor's name and donation amout"""
-    assert m.generate_thankyou(donor, amount) == message
+    assert m.generate_thankyou(donor, amount, 'file') == message
 
 
 @pytest.mark.parametrize('user_input, func', INPUT_FUNCS)
@@ -72,3 +79,9 @@ def test_donor_list_by_total(donor_dictionary, result):
 @pytest.mark.parametrize('donor_amt, result', DONATION_AMT)
 def test_validate_donation(donor_amt, result):
     assert m.validate_donation(donor_amt) == result
+
+
+@pytest.mark.parametrize('donor_amt, result', FORMAT_AMT)
+def test_format_amount(donor_amt, result):
+    assert m.format_amount(donor_amt) == result
+

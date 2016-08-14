@@ -11,6 +11,8 @@ donor_dict = {
     'Zach': [5, 3, 6]
 }
 
+DEFAULT_LETTER = 'Thank you, {name} for your donation of {amount}.\n'
+
 
 def main_menu():    # pragma: no cover
     """Main func that get executed when run in the CLI."""
@@ -42,9 +44,31 @@ def send_thanks():  # pragma: no cover
             else:
                 donor_dict.setdefault(donor, []).append(amount)
             print('')
-            print(generate_thankyou(donor, amount))
-            print('-Sincerely, Gov. Whoever')
-            press_to_continue()
+            print(generate_thankyou(donor, format_amount(amount)))
+
+
+def generate_thankyou(donor, amount, template='letter_template.txt'):
+    """Print the template_letter.txt file or a default thank you."""
+    file_found = True
+    try:
+        f = open(template, 'r')
+    except IOError:
+        try:
+            template = 'src/' + template
+            f = open(template, 'r')
+        except IOError:
+            file_found = False
+
+    if file_found:
+        letter = ""
+        for line in f:
+            if(not(line[0] == '#')):
+                letter = letter + line
+        f.close()
+    else:
+        letter = DEFAULT_LETTER
+
+    return letter.format(name=donor, amount=amount)
 
 
 def report_donors():    # pragma: no cover
@@ -97,10 +121,9 @@ def handle_input(user_input):
     return actions[user_input]
 
 
-def generate_thankyou(donor, amount):
-    """Create thank-you not from donor name and amount."""
-    return 'Thank you, {0} for your donation of ${1:.2f}.\n'.format(
-        donor, round(amount, 2))
+def format_amount(amount):
+    """Format amount as a string with $ and rounding."""
+    return '${:.2f}'.format(round(amount, 2))
 
 
 def build_report_table(donor_list):     # pragma: no cover

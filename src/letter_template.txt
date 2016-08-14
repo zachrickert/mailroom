@@ -1,0 +1,12 @@
+# You can edit this template however you like. 
+# Fields that you can use:
+# {name}
+# {amount}
+#
+#
+Dear {name},
+Thank you so much for your kind donation of {amount}.
+We here at the Ministry for Silly Walks greatly appreciate it.
+Your money will go towards creating newer sillier walks.
+
+-Sincerely, Gov. Whoever
