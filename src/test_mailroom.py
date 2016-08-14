@@ -35,7 +35,7 @@ DONATION_AMT = [
 
 INPUT_FUNCS = [
     ('1', m.send_thanks),
-    ('2', m.report_donors),
+    ('2', m.report_donors_wait),
     ('3', m.exit)
 ]
 

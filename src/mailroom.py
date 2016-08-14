@@ -5,13 +5,6 @@ import os
 import sys
 
 
-donor_dict = {
-    'Steven': [3, 6],
-    'David': [1, 5, 7],
-    'Zach': [5, 3, 6]
-}
-
-
 def main_menu():    # pragma: no cover
     """Main func that get executed when run in the CLI."""
     try:
@@ -62,6 +55,7 @@ def report_donors_wait():    # pragma: no cover
 
 def exit():     # pragma: no cover
     """Terminate program without error."""
+    save_donors(donor_dict)
     sys.exit(0)
 
 
@@ -82,6 +76,39 @@ def welcome_message():
 def press_to_continue():        # pragma: no cover
     """Wait for user input before proceeding."""
     input('Press any button to continue.')
+
+
+def read_donors():
+    """Read donor data from a txt file."""
+    donor_dict = {}
+    try:
+        f = open('donor.txt', 'r')
+        for line in f:
+            temp_list = line.split('>>')
+            donor = temp_list.pop().rstrip()
+            donor_dict[donor] = [float(i) for i in temp_list]
+
+    except IOError:
+        print('Could not find donor.txt file.')
+
+    return donor_dict
+
+
+def save_donors(donor_dict):    # pragma: no cover
+    """Save donors information to a test file."""
+    try:
+        f = open('donor.txt', 'w')
+    except IOError:
+        print('Could not save to the donor.txt file.')
+
+    for donor in donor_dict:
+        line = ''
+        for amount in donor_dict[donor]:
+            line += '{}>>'.format(amount)
+
+        line = '{}{}{}'.format(line, donor, '\n')
+        f.write(line)
+    f.close()
 
 
 def is_valid_input(user_input, my_list):
@@ -138,4 +165,5 @@ def validate_donation(my_str):
 
 
 if __name__ == '__main__':  # pragma: no cover
+    donor_dict = read_donors()
     main_menu()
