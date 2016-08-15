@@ -44,7 +44,6 @@ def send_thanks():  # pragma: no cover
             clear_screen()
             return
         elif donor == '':
-            clear_screen()
             continue
         else:
             amount = 0
