@@ -4,8 +4,7 @@
 import os
 import sys
 
-
-donor_dict = {
+DEFAULT_DONORS = {
     'Steven': [3, 6],
     'David': [1, 5, 7],
     'Zach': [5, 3, 6]
@@ -88,6 +87,7 @@ def report_donors_wait():    # pragma: no cover
 
 def exit():     # pragma: no cover
     """Terminate program without error."""
+    save_donors(donor_dict)
     sys.exit(0)
 
 
@@ -108,6 +108,50 @@ def welcome_message():
 def press_to_continue():        # pragma: no cover
     """Wait for user input before proceeding."""
     input('Press any button to continue.')
+
+
+def read_donors():
+    """Read donor data from a txt file."""
+    global donor_dict
+    donor_dict = {}
+    file_found = True
+    try:
+        donor_file = open('donor.txt', 'r')
+    except IOError:
+        try:
+            donor_file = open('src/donor.txt', 'r')
+        except IOError:
+            print('Could not find donor.txt file.')
+            file_found = False
+
+    if file_found:
+        for line in donor_file:
+            temp_list = line.split('||')
+            donor = temp_list.pop().rstrip()
+            donor_dict[donor] = [float(i) for i in temp_list]
+    else:
+        print('Test')
+        donor_dict = DEFAULT_DONORS
+
+    donor_file.close()
+    return donor_dict
+
+
+def save_donors(donor_dict):    # pragma: no cover
+    """Save donors information to a test file."""
+    try:
+        donor_file = open('donor.txt', 'w')
+    except IOError:
+        print('Could not save to the donor.txt file.')
+
+    for donor in donor_dict:
+        line = ''
+        for amount in donor_dict[donor]:
+            line += '{}||'.format(amount)
+
+        line = '{}{}{}'.format(line, donor, '\n')
+        donor_file.write(line)
+    donor_file.close()
 
 
 def is_valid_input(user_input, my_list):
@@ -161,6 +205,6 @@ def validate_donation(my_str):
         else:
             return 0
 
-
 if __name__ == '__main__':  # pragma: no cover
+    donor_dict = read_donors()
     main_menu()
