@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-"""The mailroom script will do stuff."""
+"""
+The mailroom script allows someone to add donors to a database and generate a
+thank you letter. It also allows the user to view the list of donors in a table
+format, sorted by total amount donated. The data is persisted between
+application runs.
+"""
 
 import os
 import sys
@@ -46,22 +51,6 @@ def send_thanks():  # pragma: no cover
                 donor_dict.setdefault(donor, []).append(amount)
             print('')
             print(generate_thankyou(donor, format_amount(amount)))
-
-
-def generate_thankyou(donor, amount, template='letter_template.txt'):
-    """Print the template_letter.txt file or a default thank you."""
-    try:
-        f = open('{}/{}'.format(
-            os.path.dirname(os.path.abspath(__file__)), template), 'r'
-        )
-        letter = ''
-        for line in f:
-            if line[0] != '#':
-                letter += line
-        f.close()
-    except IOError:
-        letter = DEFAULT_LETTER
-    return letter.format(name=donor, amount=amount)
 
 
 def report_donors():    # pragma: no cover
@@ -147,6 +136,22 @@ def handle_input(user_input):
 def format_amount(amount):
     """Format amount as a string with $ and rounding."""
     return '${:.2f}'.format(round(amount, 2))
+
+
+def generate_thankyou(donor, amount, template='letter_template.txt'):
+    """Print the template_letter.txt file or a default thank you."""
+    try:
+        f = open('{}/{}'.format(
+            os.path.dirname(os.path.abspath(__file__)), template), 'r'
+        )
+        letter = ''
+        for line in f:
+            if line[0] != '#':
+                letter += line
+        f.close()
+    except IOError:
+        letter = DEFAULT_LETTER
+    return letter.format(name=donor, amount=amount)
 
 
 def build_report_table(donor_list):
