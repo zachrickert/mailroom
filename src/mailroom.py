@@ -80,6 +80,7 @@ def report_donors_wait():    # pragma: no cover
 def exit():     # pragma: no cover
     """Terminate program without error."""
     save_donors(donor_dict)
+    print('\nScript terminated.\n')
     sys.exit(0)
 
 
@@ -122,18 +123,19 @@ def read_donors():
 def save_donors(donor_dict):    # pragma: no cover
     """Save donors information to a test file."""
     try:
-        donor_file = open('donor.txt', 'w')
+        donor_file = open('{}/donor.txt'.format(
+            os.path.dirname(os.path.abspath(__file__))), 'w'
+        )
+        for donor in donor_dict:
+            line = ''
+            for amount in donor_dict[donor]:
+                line += '{}||'.format(amount)
+
+            line = '{}{}{}'.format(line, donor, '\n')
+            donor_file.write(line)
+        donor_file.close()
     except IOError:
         print('Could not save to the donor.txt file.')
-
-    for donor in donor_dict:
-        line = ''
-        for amount in donor_dict[donor]:
-            line += '{}||'.format(amount)
-
-        line = '{}{}{}'.format(line, donor, '\n')
-        donor_file.write(line)
-    donor_file.close()
 
 
 def is_valid_input(user_input, my_list):
