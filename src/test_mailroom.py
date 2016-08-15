@@ -111,19 +111,25 @@ def test_welcome_message():
 
 @pytest.mark.parametrize('donor_list, table', OUTPUT_TABLE)
 def test_build_report_table(donor_list, table):
+    """Test build_report_table func to output pretty table"""
     assert m.build_report_table(donor_list) == table
 
 
 @pytest.mark.parametrize('donor_dictionary, result', DONOR_DICT)
 def test_donor_list_by_total(donor_dictionary, result):
+    """Test donor_list_by_total func to make sure it returns a sorted list of
+    donor by total donation"""
     assert m.donor_list_by_total(donor_dictionary) == result
 
 
 @pytest.mark.parametrize('donor_amt, result', DONATION_AMT)
 def test_validate_donation(donor_amt, result):
+    """Test validate_donation func to make sure it validates user input
+    correctly"""
     assert m.validate_donation(donor_amt) == result
 
 
 @pytest.mark.parametrize('donor_amt, result', FORMAT_AMT)
 def test_format_amount(donor_amt, result):
+    """Test format_amount func to make sure it format dollar amount"""
     assert m.format_amount(donor_amt) == result
