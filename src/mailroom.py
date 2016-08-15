@@ -49,8 +49,7 @@ def send_thanks():  # pragma: no cover
                     input("Input donation amount: "))
             else:
                 donor_dict.setdefault(donor, []).append(amount)
-            print('')
-            print(generate_thankyou(donor, format_amount(amount)))
+            print('\n' + generate_thankyou(donor, format_amount(amount)))
 
 
 def report_donors():    # pragma: no cover
