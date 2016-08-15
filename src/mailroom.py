@@ -37,10 +37,13 @@ def send_thanks():  # pragma: no cover
     while True:
         donor = input("Enter Donor name, 'list' or 'return': ")
         if donor == 'list':
+            clear_screen()
             print(build_report_table(donor_list_by_total(donor_dict)))
         elif donor == 'return':
+            clear_screen()
             return
         elif donor == '':
+            clear_screen()
             continue
         else:
             amount = 0
