@@ -20,7 +20,7 @@ def main_menu():    # pragma: no cover
             clear_screen()
             print(welcome_message())
             user_input = input("Selection: ")
-            if not is_valid_input(user_input, ['1', '2', '3']):
+            if user_input not in ['1', '2', '3']:
                 continue
             handle_input(user_input)()
     except KeyboardInterrupt:
@@ -135,13 +135,6 @@ def save_donors(donor_dict):    # pragma: no cover
         donor_file.close()
     except IOError:
         print('Could not save to the donor.txt file.')
-
-
-def is_valid_input(user_input, my_list):
-    """Promt user input check if in a list."""
-    if user_input in my_list:
-        return True
-    return False
 
 
 def handle_input(user_input):
