@@ -50,25 +50,17 @@ def send_thanks():  # pragma: no cover
 
 def generate_thankyou(donor, amount, template='letter_template.txt'):
     """Print the template_letter.txt file or a default thank you."""
-    file_found = True
     try:
-        f = open(template, 'r')
-    except IOError:
-        try:
-            template = 'src/' + template
-            f = open(template, 'r')
-        except IOError:
-            file_found = False
-
-    if file_found:
-        letter = ""
+        f = open('{}/{}'.format(
+            os.path.dirname(os.path.abspath(__file__)), template), 'r'
+        )
+        letter = ''
         for line in f:
             if line[0] != '#':
-                letter = letter + line
+                letter += line
         f.close()
-    else:
+    except IOError:
         letter = DEFAULT_LETTER
-
     return letter.format(name=donor, amount=amount)
 
 
