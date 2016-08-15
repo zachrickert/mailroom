@@ -67,6 +67,19 @@ READ_DONOR_FILE = [
     ('test_donor.txt', {'TEST': [99.99]})
 ]
 
+OUTPUT_TABLE = [
+    (
+        [('David', 50), ('Steven', 60), ('Zach', 70)],
+        '\n{}|{}\n'.format('-' * 24, '-' * 10) +
+        'Name{}|Total\n'.format(' ' * 20) +
+        '{}|{}\n'.format('-' * 24, '-' * 10) +
+        'David{}|{}\n'.format(' ' * 19, 50) +
+        'Steven{}|{}\n'.format(' ' * 18, 60) +
+        'Zach{}|{}\n'.format(' ' * 20, 70) +
+        '{}|{}\n'.format('-' * 24, '-' * 10)
+    )
+]
+
 
 @pytest.mark.parametrize('donor, amount, template, message', DONOR_THANKYOU)
 def test_generate_thankyou(donor, amount, template, message):
@@ -95,7 +108,10 @@ def test_welcome_message():
                                    'Enter 2 to view report\n'
                                    'Enter 3 to exit\n')
 
-# TODO for Steven: write test for build_report_table func
+
+@pytest.mark.parametrize('donor_list, table', OUTPUT_TABLE)
+def test_build_report_table(donor_list, table):
+    assert m.build_report_table(donor_list) == table
 
 
 @pytest.mark.parametrize('donor_dictionary, result', DONOR_DICT)

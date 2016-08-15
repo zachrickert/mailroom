@@ -149,7 +149,7 @@ def format_amount(amount):
     return '${:.2f}'.format(round(amount, 2))
 
 
-def build_report_table(donor_list):     # pragma: no cover
+def build_report_table(donor_list):
     """Generate a report table from donor list."""
     top_border = '\n{0}|{1}\n'.format('-' * 24, '-' * 10)
     row_separator = '{0}|{1}\n'.format('-' * 24, '-' * 10)
