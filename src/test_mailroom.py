@@ -64,7 +64,7 @@ INPUT_FUNCS = [
 
 READ_DONOR_FILE = [
     ('somefile.txt', m.DEFAULT_DONORS),
-    ('test_donor.txt', {'TEST': [99.99]})
+    ('test_read_donor.txt', {'TEST': [99.99]})
 ]
 
 OUTPUT_TABLE = [
@@ -78,6 +78,11 @@ OUTPUT_TABLE = [
         'Zach{}|{}\n'.format(' ' * 20, 70) +
         '{}|{}\n'.format('-' * 24, '-' * 10)
     )
+]
+
+SAVE_DONOR_DICT = [
+    ({'Steven': [1, 2, 3]}, 'test_save_donor.txt', 'Data saved'),
+    ({}, '#%&$/', 'Could not save to the donor.txt file.')
 ]
 
 
@@ -113,6 +118,14 @@ def test_welcome_message():
 def test_build_report_table(donor_list, table):
     """Test build_report_table func to output pretty table"""
     assert m.build_report_table(donor_list) == table
+
+
+@pytest.mark.parametrize(
+    'donor_dict, donor_file_name, save_message', SAVE_DONOR_DICT
+)
+def test_save_donors(donor_dict, donor_file_name, save_message):
+    """Test save_donors func to make sure it save data when exit"""
+    assert m.save_donors(donor_dict, donor_file_name) == save_message
 
 
 @pytest.mark.parametrize('donor_dictionary, result', DONOR_DICT)

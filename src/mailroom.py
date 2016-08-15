@@ -8,6 +8,7 @@ application runs.
 
 import os
 import sys
+import io
 
 DEFAULT_DONORS = {
     'Steven': [3, 6],
@@ -70,8 +71,8 @@ def report_donors_wait():    # pragma: no cover
 
 def exit():     # pragma: no cover
     """Terminate program without error."""
-    save_donors(donor_dict)
-    print('\nScript terminated.\n')
+    print(save_donors(donor_dict))
+    print('Script terminated.\n')
     sys.exit(0)
 
 
@@ -97,7 +98,7 @@ def read_donors(donor_file_name='donor.txt'):
     """Read donor data from a txt file."""
     donor_dict = {}
     try:
-        donor_file = open('{}/{}'.format(
+        donor_file = io.open('{}/{}'.format(
             os.path.dirname(os.path.abspath(__file__)),
             donor_file_name
         ), 'r')
@@ -111,12 +112,12 @@ def read_donors(donor_file_name='donor.txt'):
     return donor_dict
 
 
-def save_donors(donor_dict):    # pragma: no cover
+def save_donors(donor_dict, donor_file_name='donor.txt'):
     """Save donors information to a test file."""
     try:
-        donor_file = open('{}/donor.txt'.format(
-            os.path.dirname(os.path.abspath(__file__))), 'w'
-        )
+        donor_file = io.open('{}/{}'.format(
+            os.path.dirname(os.path.abspath(__file__)), donor_file_name
+        ), 'w')
         for donor in donor_dict:
             line = ''
             for amount in donor_dict[donor]:
@@ -125,8 +126,9 @@ def save_donors(donor_dict):    # pragma: no cover
             line = '{}{}{}'.format(line, donor, '\n')
             donor_file.write(line)
         donor_file.close()
+        return 'Data saved'
     except IOError:
-        print('Could not save to the donor.txt file.')
+        return 'Could not save to the donor.txt file.'
 
 
 def handle_input(user_input):
@@ -143,7 +145,7 @@ def format_amount(amount):
 def generate_thankyou(donor, amount, template='letter_template.txt'):
     """Print the template_letter.txt file or a default thank you."""
     try:
-        f = open('{}/{}'.format(
+        f = io.open('{}/{}'.format(
             os.path.dirname(os.path.abspath(__file__)), template), 'r'
         )
         letter = ''
