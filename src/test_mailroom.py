@@ -37,7 +37,7 @@ FORMAT_AMT = [
     (1, '$1.00'),
     (0, '$0.00'),
     (1.5, '$1.50'),
-    (5 / 3, '$1.67'),
+    (5.0 / 3, '$1.67'),
 ]
 
 INPUT_FUNCS = [
@@ -50,19 +50,19 @@ INPUT_FUNCS = [
 @pytest.mark.parametrize('donor, amount, message', DONOR_THANKYOU)
 def test_generate_thankyou(donor, amount, message):
     """Test generate_thankyou func to output correct thankyou message based on
-    donor's name and donation amout"""
+    donor's name and donation amount."""
     assert m.generate_thankyou(donor, amount, 'file') == message
 
 
 @pytest.mark.parametrize('user_input, func', INPUT_FUNCS)
 def test_handle_input(user_input, func):
     """Test handle_input func if return correct func to be called at each valid
-    user input"""
+    user input."""
     assert m.handle_input(user_input) == func
 
 
 def test_welcome_message():
-    """Test welcone_message func to output correct info and instructions"""
+    """Test welcone_message func to output correct info and instructions."""
     assert m.welcome_message() == ('Welcome to the donor database.\n'
                                    'Enter 1 to send thank you note\n'
                                    'Enter 2 to view report\n'
@@ -84,4 +84,3 @@ def test_validate_donation(donor_amt, result):
 @pytest.mark.parametrize('donor_amt, result', FORMAT_AMT)
 def test_format_amount(donor_amt, result):
     assert m.format_amount(donor_amt) == result
-
