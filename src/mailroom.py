@@ -114,7 +114,7 @@ def read_donors(donor_file_name='donor.txt'):
 def save_donors(donor_dict, donor_file_name='donor.txt'):
     """Save donors information to a test file."""
     try:
-        donor_file = io.open('{}/{}'.format(
+        donor_file = open('{}/{}'.format(
             os.path.dirname(os.path.abspath(__file__)), donor_file_name
         ), 'w')
         for donor in donor_dict:
