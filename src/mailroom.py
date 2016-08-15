@@ -24,7 +24,7 @@ def main_menu():    # pragma: no cover
             clear_screen()
             handle_input(user_input)()
     except KeyboardInterrupt:
-        print('\nScript terminated\n')
+        exit()
 
 
 def send_thanks():  # pragma: no cover
