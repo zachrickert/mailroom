@@ -104,28 +104,18 @@ def press_to_continue():        # pragma: no cover
 
 def read_donors():
     """Read donor data from a txt file."""
-    global donor_dict
     donor_dict = {}
-    file_found = True
     try:
-        donor_file = open('donor.txt', 'r')
-    except IOError:
-        try:
-            donor_file = open('src/donor.txt', 'r')
-        except IOError:
-            print('Could not find donor.txt file.')
-            file_found = False
-
-    if file_found:
+        donor_file = open('{}/donor.txt'.format(
+            os.path.dirname(os.path.abspath(__file__))), 'r'
+        )
         for line in donor_file:
             temp_list = line.split('||')
             donor = temp_list.pop().rstrip()
             donor_dict[donor] = [float(i) for i in temp_list]
-    else:
-        print('Test')
+        donor_file.close()
+    except IOError:
         donor_dict = DEFAULT_DONORS
-
-    donor_file.close()
     return donor_dict
 
 
