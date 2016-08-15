@@ -102,13 +102,14 @@ def welcome_message():
             'Enter 3 to exit\n')
 
 
-def read_donors():
+def read_donors(donor_file_name='donor.txt'):
     """Read donor data from a txt file."""
     donor_dict = {}
     try:
-        donor_file = open('{}/donor.txt'.format(
-            os.path.dirname(os.path.abspath(__file__))), 'r'
-        )
+        donor_file = open('{}/{}'.format(
+            os.path.dirname(os.path.abspath(__file__)),
+            donor_file_name
+        ), 'r')
         for line in donor_file:
             temp_list = line.split('||')
             donor = temp_list.pop().rstrip()
