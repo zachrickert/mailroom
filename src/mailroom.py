@@ -17,11 +17,11 @@ def main_menu():    # pragma: no cover
     """Main func that get executed when run in the CLI."""
     try:
         while True:
+            clear_screen()
             print(welcome_message())
             user_input = input("Selection: ")
             if not is_valid_input(user_input, ['1', '2', '3']):
                 continue
-            clear_screen()
             handle_input(user_input)()
     except KeyboardInterrupt:
         exit()
@@ -91,7 +91,6 @@ def clear_screen():     # pragma: no cover
 
 def welcome_message():
     """Return welcome message and instruction when the app starts."""
-    clear_screen()
     return ('Welcome to the donor database.\n'
             'Enter 1 to send thank you note\n'
             'Enter 2 to view report\n'
@@ -169,7 +168,8 @@ def build_report_table(donor_list):     # pragma: no cover
 
 
 def donor_list_by_total(my_dict):
-    """Return a sorted list of tuples, each tuple contains donor name and total donated amount."""
+    """Return a sorted list of tuples, each tuple contains donor name and total
+    donated amount."""
     donor_list = []
     for donor in my_dict:
         donor_list.append((donor, sum(my_dict[donor])))
