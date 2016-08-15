@@ -2,7 +2,6 @@ argh==0.26.2
 colorama==0.3.7
 coverage==4.2
 docopt==0.6.2
--e git+https://github.com/zachrickert/mailroom@c0b2afcac4279f97bc110813549c389b125ca900#egg=mailroom
 pathtools==0.1.2
 pluggy==0.3.1
 py==1.4.31

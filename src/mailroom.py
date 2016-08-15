@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
-"""The mailroom script will do stuff."""
+"""
+The mailroom script allows someone to add donors to a database and generate a
+thank you letter. It also allows the user to view the list of donors in a table
+format, sorted by total amount donated. The data is persisted between
+application runs.
+"""
 
 import os
 import sys
+import io
 
 DEFAULT_DONORS = {
     'Steven': [3, 6],
@@ -17,14 +23,14 @@ def main_menu():    # pragma: no cover
     """Main func that get executed when run in the CLI."""
     try:
         while True:
+            clear_screen()
             print(welcome_message())
             user_input = input("Selection: ")
-            if not is_valid_input(user_input, ['1', '2', '3']):
+            if user_input not in ['1', '2', '3']:
                 continue
-            clear_screen()
             handle_input(user_input)()
     except KeyboardInterrupt:
-        print('\nScript terminated\n')
+        exit()
 
 
 def send_thanks():  # pragma: no cover
@@ -32,8 +38,10 @@ def send_thanks():  # pragma: no cover
     while True:
         donor = input("Enter Donor name, 'list' or 'return': ")
         if donor == 'list':
+            clear_screen()
             print(build_report_table(donor_list_by_total(donor_dict)))
         elif donor == 'return':
+            clear_screen()
             return
         elif donor == '':
             continue
@@ -44,24 +52,7 @@ def send_thanks():  # pragma: no cover
                     input("Input donation amount: "))
             else:
                 donor_dict.setdefault(donor, []).append(amount)
-            print('')
-            print(generate_thankyou(donor, format_amount(amount)))
-
-
-def generate_thankyou(donor, amount, template='letter_template.txt'):
-    """Print the template_letter.txt file or a default thank you."""
-    try:
-        f = open('{}/{}'.format(
-            os.path.dirname(os.path.abspath(__file__)), template), 'r'
-        )
-        letter = ''
-        for line in f:
-            if line[0] != '#':
-                letter += line
-        f.close()
-    except IOError:
-        letter = DEFAULT_LETTER
-    return letter.format(name=donor, amount=amount)
+            print('\n' + generate_thankyou(donor, format_amount(amount)))
 
 
 def report_donors():    # pragma: no cover
@@ -79,7 +70,8 @@ def report_donors_wait():    # pragma: no cover
 
 def exit():     # pragma: no cover
     """Terminate program without error."""
-    save_donors(donor_dict)
+    print(save_donors(donor_dict))
+    print('Script terminated.\n')
     sys.exit(0)
 
 
@@ -88,69 +80,54 @@ def clear_screen():     # pragma: no cover
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
+def press_to_continue():        # pragma: no cover
+    """Wait for user input before proceeding."""
+    input('Press any button to continue.')
+
+
 def welcome_message():
     """Return welcome message and instruction when the app starts."""
-    clear_screen()
     return ('Welcome to the donor database.\n'
             'Enter 1 to send thank you note\n'
             'Enter 2 to view report\n'
             'Enter 3 to exit\n')
 
 
-def press_to_continue():        # pragma: no cover
-    """Wait for user input before proceeding."""
-    input('Press any button to continue.')
-
-
-def read_donors():
+def read_donors(donor_file_name='donor.txt'):
     """Read donor data from a txt file."""
-    global donor_dict
     donor_dict = {}
-    file_found = True
     try:
-        donor_file = open('donor.txt', 'r')
-    except IOError:
-        try:
-            donor_file = open('src/donor.txt', 'r')
-        except IOError:
-            print('Could not find donor.txt file.')
-            file_found = False
-
-    if file_found:
+        donor_file = io.open('{}/{}'.format(
+            os.path.dirname(os.path.abspath(__file__)),
+            donor_file_name
+        ), 'r')
         for line in donor_file:
             temp_list = line.split('||')
             donor = temp_list.pop().rstrip()
             donor_dict[donor] = [float(i) for i in temp_list]
-    else:
-        print('Test')
+        donor_file.close()
+    except IOError:
         donor_dict = DEFAULT_DONORS
-
-    donor_file.close()
     return donor_dict
 
 
-def save_donors(donor_dict):    # pragma: no cover
+def save_donors(donor_dict, donor_file_name='donor.txt'):
     """Save donors information to a test file."""
     try:
-        donor_file = open('donor.txt', 'w')
+        donor_file = open('{}/{}'.format(
+            os.path.dirname(os.path.abspath(__file__)), donor_file_name
+        ), 'w')
+        for donor in donor_dict:
+            line = ''
+            for amount in donor_dict[donor]:
+                line += '{}||'.format(amount)
+
+            line = '{}{}{}'.format(line, donor, '\n')
+            donor_file.write(line)
+        donor_file.close()
+        return 'Data saved'
     except IOError:
-        print('Could not save to the donor.txt file.')
-
-    for donor in donor_dict:
-        line = ''
-        for amount in donor_dict[donor]:
-            line += '{}||'.format(amount)
-
-        line = '{}{}{}'.format(line, donor, '\n')
-        donor_file.write(line)
-    donor_file.close()
-
-
-def is_valid_input(user_input, my_list):
-    """Promt user input check if in a list."""
-    if user_input in my_list:
-        return True
-    return False
+        return 'Could not save to the donor.txt file.'
 
 
 def handle_input(user_input):
@@ -164,7 +141,23 @@ def format_amount(amount):
     return '${:.2f}'.format(round(amount, 2))
 
 
-def build_report_table(donor_list):     # pragma: no cover
+def generate_thankyou(donor, amount, template='letter_template.txt'):
+    """Print the template_letter.txt file or a default thank you."""
+    try:
+        f = io.open('{}/{}'.format(
+            os.path.dirname(os.path.abspath(__file__)), template), 'r'
+        )
+        letter = ''
+        for line in f:
+            if line[0] != '#':
+                letter += line
+        f.close()
+    except IOError:
+        letter = DEFAULT_LETTER
+    return letter.format(name=donor, amount=amount)
+
+
+def build_report_table(donor_list):
     """Generate a report table from donor list."""
     top_border = '\n{0}|{1}\n'.format('-' * 24, '-' * 10)
     row_separator = '{0}|{1}\n'.format('-' * 24, '-' * 10)
@@ -177,7 +170,8 @@ def build_report_table(donor_list):     # pragma: no cover
 
 
 def donor_list_by_total(my_dict):
-    """Return a sorted list of tuples, each tuple contains donor name and total donated amount."""
+    """Return a sorted list of tuples, each tuple contains donor name and total
+    donated amount."""
     donor_list = []
     for donor in my_dict:
         donor_list.append((donor, sum(my_dict[donor])))
