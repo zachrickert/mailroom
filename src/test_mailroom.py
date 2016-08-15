@@ -5,9 +5,25 @@ import pytest
 import mailroom as m
 
 DONOR_THANKYOU = [
-    ('David', 10, 'Thank you, David for your donation of 10.\n'),
-    ('Steven', 10, 'Thank you, Steven for your donation of 10.\n'),
-    ('Zach', 9.99, 'Thank you, Zach for your donation of 9.99.\n')
+    (
+        'David', 10, 'randomfile.txt',
+        'Thank you, David for your donation of 10.\n'
+    ),
+    (
+        'Steven', 10, 'randomfile.txt',
+        'Thank you, Steven for your donation of 10.\n'
+    ),
+    (
+        'Zach', 9.99, 'randomfile.txt',
+        'Thank you, Zach for your donation of 9.99.\n'
+    ),
+    (
+        'Zach', 9.99, 'letter_template.txt',
+        'Dear Zach,\nThank you so much for your kind donation of 9.99.\n'
+        'We here at the Ministry for Silly Walks greatly appreciate it.\n'
+        'Your money will go towards creating newer sillier walks.'
+        '\n\n-Sincerely, Gov. Whoever\n'
+    )
 ]
 
 DONOR_DICT = [
@@ -46,12 +62,23 @@ INPUT_FUNCS = [
     ('3', m.exit)
 ]
 
+READ_DONOR_FILE = [
+    ('somefile.txt', m.DEFAULT_DONORS),
+    ('test_donor.txt', {'TEST': [99.99]})
+]
 
-@pytest.mark.parametrize('donor, amount, message', DONOR_THANKYOU)
-def test_generate_thankyou(donor, amount, message):
+
+@pytest.mark.parametrize('donor, amount, template, message', DONOR_THANKYOU)
+def test_generate_thankyou(donor, amount, template, message):
     """Test generate_thankyou func to output correct thankyou message based on
     donor's name and donation amount."""
-    assert m.generate_thankyou(donor, amount, 'file') == message
+    assert m.generate_thankyou(donor, amount, template) == message
+
+
+@pytest.mark.parametrize('donor_file_name, donor_dict', READ_DONOR_FILE)
+def test_read_donors(donor_file_name, donor_dict):
+    """Test read_donors func to read from donor.txt correctly"""
+    assert m.read_donors(donor_file_name) == donor_dict
 
 
 @pytest.mark.parametrize('user_input, func', INPUT_FUNCS)
