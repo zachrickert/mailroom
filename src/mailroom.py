@@ -89,17 +89,17 @@ def clear_screen():     # pragma: no cover
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
+def press_to_continue():        # pragma: no cover
+    """Wait for user input before proceeding."""
+    input('Press any button to continue.')
+
+
 def welcome_message():
     """Return welcome message and instruction when the app starts."""
     return ('Welcome to the donor database.\n'
             'Enter 1 to send thank you note\n'
             'Enter 2 to view report\n'
             'Enter 3 to exit\n')
-
-
-def press_to_continue():        # pragma: no cover
-    """Wait for user input before proceeding."""
-    input('Press any button to continue.')
 
 
 def read_donors():
